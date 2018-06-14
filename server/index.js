@@ -13,9 +13,9 @@ const flash = require('express-flash');
 const path = require('path');
 const passport = require('passport');
 // const expressValidator = require('express-validator');
-// const expressStatusMonitor = require('express-status-monitor');
+const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
-
+const chalk = require('chalk');
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -52,7 +52,7 @@ const app = express();
  * Express configuration.
  */
 app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
-app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);
+app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 app.use(expressStatusMonitor());
@@ -64,7 +64,7 @@ app.use(sass({
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(expressValidator());
+// app.use(expressValidator());
 // Session
 // app.use(session({
 //   resave: true,
@@ -114,16 +114,16 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 /**
  * Primary app routes.
  */
-app.get('/', homeController.index);
-app.get('/login', userController.getLogin);
-app.post('/login', userController.postLogin);
-app.get('/logout', userController.logout);
-app.get('/forgot', userController.getForgot);
-app.post('/forgot', userController.postForgot);
-app.get('/reset/:token', userController.getReset);
-app.post('/reset/:token', userController.postReset);
-app.get('/signup', userController.getSignup);
-app.post('/signup', userController.postSignup);
+// app.get('/', homeController.index);
+// app.get('/login', userController.getLogin);
+// app.post('/login', userController.postLogin);
+// app.get('/logout', userController.logout);
+// app.get('/forgot', userController.getForgot);
+// app.post('/forgot', userController.postForgot);
+// app.get('/reset/:token', userController.getReset);
+// app.post('/reset/:token', userController.postReset);
+// app.get('/signup', userController.getSignup);
+// app.post('/signup', userController.postSignup);
 
 
 /**

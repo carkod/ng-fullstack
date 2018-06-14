@@ -10,7 +10,9 @@
   "author": "Carlos Wu",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^2.4.1",
     "express": "^4.16.3",
+    "express-status-monitor": "^1.0.1",
     "handlebars": "^4.0.11",
     "node-sass": "^4.9.0",
     "node-sass-middleware": "^0.11.0",
