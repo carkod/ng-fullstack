@@ -4,6 +4,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const compression = require('compression');
+const exphbs  = require('express-handlebars');
+
 // const session = require('express-session');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
@@ -23,10 +25,10 @@ const chalk = require('chalk');
 dotenv.load({ path: '.env.example' });
 
 /**
- * Controllers (route handlers).
+ * Routing
  */
-const homeController = require('./home');
-const apiController = require('./api');
+const routes = require('./routes');
+
 
 /**
  * API keys and Passport configuration.
@@ -37,7 +39,7 @@ const passportConfig = require('./config/passport');
  * Create Express server.
  */
 const app = express();
-
+const hbs = exphbs.create({ /* config */ });
 /**
  * Connect to MongoDB.
  */
@@ -54,7 +56,11 @@ const app = express();
 app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
 app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8000);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'handlebars');
+/* Set handlebars engine */
+
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
+
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
@@ -77,8 +83,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   })
 // }));
 app.use(passport.initialize());
-app.use(passport.session());
-app.use(flash());
+// app.use(passport.session());
+// app.use(flash());
 
 // Add when mongodb is available
 // app.use((req, res, next) => {
@@ -112,9 +118,10 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
 /**
- * Primary app routes.
+ * Routes
  */
-// app.get('/', homeController.index);
+app.get('/', routes.index);
+app.get('/api', routes.getApi);
 // app.get('/login', userController.getLogin);
 // app.post('/login', userController.postLogin);
 // app.get('/logout', userController.logout);
@@ -125,11 +132,6 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 // app.get('/signup', userController.getSignup);
 // app.post('/signup', userController.postSignup);
 
-
-/**
- * API examples routes.
- */
-app.get('/api', apiController.getApi);
 
 // app.get('/api/binance', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFoursquare);
 
